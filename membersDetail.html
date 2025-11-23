@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGCM - UCC Student Records System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .content {
+            display: flex;
+            min-height: 600px;
+        }
+
+        .form-section {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 30px;
+            border-right: 2px solid #e9ecef;
+        }
+
+        .table-section {
+            flex: 2;
+            padding: 30px;
+            background: white;
+            overflow: auto;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+
+        input, select {
+            padding: 10px 12px;
+            border: 2px solid #e1e5ee;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s;
+            background-color: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .stats {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 4px solid #4CAF50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 14px;
+            background: white;
+        }
+
+        th {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e1e5ee;
+            word-wrap: break-word;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e3f2fd;
+            transition: background-color 0.2s;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 60px;
+            color: #666;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+
+        .view-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .view-btn:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .update-btn {
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .update-btn:hover {
+            background: #e67e22;
+            transform: scale(1.05);
+        }
+
+        .search-box {
+            padding: 10px 15px;
+            border: 2px solid #e1e5ee;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 300px;
+            max-width: 100%;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Search Results Section */
+        .search-results-section {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .search-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .search-results-count {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .student-details {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .student-details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e1e5ee;
+        }
+
+        .student-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .student-id {
+            font-size: 1rem;
+            color: #666;
+            background: #e1e5ee;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .student-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            color: #333;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e1e5ee;
+        }
+
+        .highlight {
+            background-color: #fff9c4;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        /* Residence Update Section */
+        .residence-update-section {
+            background: #fff3cd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .residence-update-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .residence-update-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #856404;
+        }
+
+        .residence-update-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .residence-update-form .form-group {
+            margin-bottom: 0;
+        }
+
+        .residence-update-btn {
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .residence-update-btn:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 1024px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .form-section {
+                border-right: none;
+                border-bottom: 2px solid #e9ecef;
+            }
+            
+            .residence-update-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            th, td {
+                padding: 10px 8px;
+                font-size: 13px;
+            }
+            
+            .stats {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .student-details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .student-details-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+
+        .program-badge {
+            background: #e1f5fe;
+            color: #0277bd;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .level-badge {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .executive-badge {
+            background: #fff3cd;
+            color: #856404;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border: 1px solid #c3e6cb;
+            display: none;
+        }
+
+        .info-message {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border: 1px solid #bee5eb;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .checkbox-group input {
+            width: 18px;
+            height: 18px;
+        }
+
+        .sort-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .sort-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .sort-btn.active {
+            background: #495057;
+            font-weight: bold;
+        }
+
+        .sort-btn:hover {
+            background: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AGCM - UCC Student Records System</h1>
+            <p>Add new members and manage members records</p>
+        </div>
+        
+        <div class="content">
+            <!-- Form Section -->
+            <div class="form-section">
+                <h2>Add New Member</h2>
+                <div class="success-message" id="successMessage">
+                    Student added successfully!
+                </div>
+                <form id="studentForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName" class="required">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lastName" class="required">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="programType" class="required">Program Type</label>
+                            <select id="programType" name="programType" required>
+                                <option value="">Select Program Type</option>
+                                <option value="undergraduate">UNDERGRADUATE</option>
+                                <option value="postgraduate">POSTGRADUATE</option>
+                                <option value="diploma">DIPLOMA</option>
+                                <option value="certificate">BED</option>
+                                <option value="phd">PhD</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="programStudying" class="required">Program Studying</label>
+                            <select id="programStudying" name="programStudying" required>
+                                <option value="">Select Program</option>
+                                <option value="computer-science">Computer Science</option>
+                                <option value="business-administration">Business Administration</option>
+                                <option value="engineering">Engineering</option>
+                                <option value="medicine">Medicine</option>
+                                <option value="law">Law</option>
+                                <option value="arts">Arts & Humanities</option>
+                                <option value="sciences">Natural Sciences</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="studentId" class="required">Student ID</label>
+                            <input type="text" id="studentId" name="studentId" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="level" class="required">Level</label>
+                            <select id="level" name="level" required>
+                                <option value="">Select Level</option>
+                                <option value="100"> LEVEL 100</option>
+                                <option value="200">LEVEL 200</option>
+                                <option value="300">LEVEL 300</option>
+                                <option value="400">LEVEL 400</option>
+                                <option value="500">LEVEL 500</option>
+                                <option value="600">LEVEL 600</option>
+                                <option value="masters">MASTERS</option>
+                                <option value="phd">PHD</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="currentResidence" class="required">Current Residence</label>
+                            <input type="text" id="currentResidence" name="currentResidence" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="hostelName">Hostel Name</label>
+                            <input type="text" id="hostelName" name="hostelName">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="personalContact" class="required">Personal Contact</label>
+                            <input type="tel" id="personalContact" name="personalContact" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="emergencyContact" class="required">Emergency Contact</label>
+                            <input type="tel" id="emergencyContact" name="emergencyContact" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="department" class="required">Department</label>
+                            <select id="department" name="department" required>
+                                <option value="">Select Department</option>
+                                <option value="computer-science">PRAYER</option>
+                                <option value="mathematics">EVANGELISM</option>
+                                <option value="physics">FINANCE</option>
+                                <option value="chemistry">MEDIA</option>
+                                <option value="biology">USHERING</option>
+                                <option value="economics">FAMILY VINE</option>
+                                <option value="business">ORGA-TECH</option>
+                                <option value="english">SUNDAY SCHOOL</option>
+                                <option value="history">MEM OF VALOR</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Executive Status Field -->
+                        <div class="form-group">
+                            <label>Executive Status</label>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="isExecutive" name="isExecutive">
+                                <label for="isExecutive">Is Executive Member</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Add Student to Records</button>
+                </form>
+            </div>
+            
+            <!-- Table Section -->
+            <div class="table-section">
+                <h2>Student Records</h2>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="totalStudents">0</span>
+                        <span class="stat-label">Total Students</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="executiveStudents">0</span>
+                        <span class="stat-label">Executive Members</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="lastUpdated">Never</span>
+                        <span class="stat-label">Last Updated</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="storageSize">0 KB</span>
+                        <span class="stat-label">Storage Used</span>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <input type="text" class="search-box" id="searchInput" placeholder="Search students...">
+                    <button class="btn btn-primary" onclick="clearSearch()">Clear Search</button>
+                    <button class="btn btn-success" onclick="exportToCSV()">Export to CSV</button>
+                    <button class="btn btn-danger" onclick="clearAllData()">Clear All Data</button>
+                </div>
+
+                <!-- Residence Update Section -->
+                <div class="residence-update-section" id="residenceUpdateSection">
+                    <div class="residence-update-header">
+                        <div class="residence-update-title">Update Student Residence</div>
+                    </div>
+                    <div class="info-message">
+                        You can update the residence for the selected student. This will change their current residence and hostel information.
+                    </div>
+                    <form id="residenceUpdateForm" class="residence-update-form">
+                        <div class="form-group">
+                            <label for="updateStudentName">Student Name</label>
+                            <input type="text" id="updateStudentName" class="detail-value" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateResidence" class="required">New Residence</label>
+                            <input type="text" id="updateResidence" name="updateResidence" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateHostel">New Hostel (Optional)</label>
+                            <input type="text" id="updateHostel" name="updateHostel">
+                        </div>
+                        <input type="hidden" id="updateStudentId">
+                        <button type="submit" class="residence-update-btn">Update Residence</button>
+                    </form>
+                </div>
+
+                <table id="studentsTable">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Program Type</th>
+                            <th>Program</th>
+                            <th>Student ID</th>
+                            <th>Level</th>
+                            <th>Residence</th>
+                            <th>Hostel</th>
+                            <th>Contact</th>
+                            <th>Emergency</th>
+                            <th>Department</th>
+                            <th>Executive</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody">
+                        <tr>
+                            <td colspan="13" class="no-data">
+                                No student records found in storage.<br>
+                                <small>Add students using the form to see them here.</small>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- Search Results Section -->
+                <div class="search-results-section" id="searchResultsSection">
+                    <div class="search-results-header">
+                        <h2>Search Results</h2>
+                        <div class="search-results-count" id="searchResultsCount">0 results found</div>
+                    </div>
+                    <div class="sort-controls" id="sortControls" style="display: none;">
+                        <span>Sort by:</span>
+                        <button class="sort-btn active" onclick="sortSearchResults('firstName')">First Name (A-Z)</button>
+                        <button class="sort-btn" onclick="sortSearchResults('lastName')">Last Name (A-Z)</button>
+                        <button class="sort-btn" onclick="sortSearchResults('level')">Level</button>
+                        <button class="sort-btn" onclick="sortSearchResults('department')">Department</button>
+                    </div>
+                    <div id="searchResultsContainer">
+                        <!-- Search results will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Student data storage - using localStorage for persistence
+        let students = JSON.parse(localStorage.getItem('students')) || [];
+        let currentStudentForUpdate = null;
+        let currentSearchResults = [];
+        let currentSortField = 'firstName';
+
+        // Form submission handler
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate form
+            if (!validateForm()) {
+                return;
+            }
+            
+            // Get form values
+            const formData = {
+                id: Date.now(), // Unique ID for each student
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                programType: document.getElementById('programType').value,
+                programStudying: document.getElementById('programStudying').value,
+                studentId: document.getElementById('studentId').value.trim(),
+                level: document.getElementById('level').value,
+                currentResidence: document.getElementById('currentResidence').value.trim(),
+                hostelName: document.getElementById('hostelName').value.trim(),
+                personalContact: document.getElementById('personalContact').value.trim(),
+                emergencyContact: document.getElementById('emergencyContact').value.trim(),
+                department: document.getElementById('department').value,
+                isExecutive: document.getElementById('isExecutive').checked,
+                timestamp: new Date().toLocaleString()
+            };
+            
+            // Check if student ID already exists
+            const existingStudent = students.find(student => student.studentId === formData.studentId);
+            if (existingStudent) {
+                alert('Student ID already exists! Please use a different Student ID.');
+                return;
+            }
+            
+            // Add student to storage
+            students.push(formData);
+            
+            // Save to localStorage
+            localStorage.setItem('students', JSON.stringify(students));
+            
+            // Update table and stats
+            updateStudentTable();
+            updateStats();
+            
+            // Show success message
+            showSuccessMessage();
+            
+            // Reset form
+            this.reset();
+        });
+
+        // Residence update form handler
+        document.getElementById('residenceUpdateForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const studentId = document.getElementById('updateStudentId').value;
+            const newResidence = document.getElementById('updateResidence').value.trim();
+            const newHostel = document.getElementById('updateHostel').value.trim();
+            
+            if (!newResidence) {
+                alert('Please enter a new residence address');
+                return;
+            }
+            
+            // Find and update the student
+            const studentIndex = students.findIndex(s => s.id == studentId);
+            if (studentIndex !== -1) {
+                students[studentIndex].currentResidence = newResidence;
+                students[studentIndex].hostelName = newHostel;
+                
+                // Save to localStorage
+                localStorage.setItem('students', JSON.stringify(students));
+                
+                // Update table and stats
+                updateStudentTable();
+                updateStats();
+                
+                // Update search results if active
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput.value) {
+                    searchStudents();
+                }
+                
+                alert('Residence updated successfully!');
+                
+                // Hide the update section
+                document.getElementById('residenceUpdateSection').style.display = 'none';
+                this.reset();
+            }
+        });
+
+        // Function to validate form
+        function validateForm() {
+            const requiredFields = [
+                'firstName', 'lastName', 'programType', 'programStudying',
+                'studentId', 'level', 'currentResidence', 'personalContact',
+                'emergencyContact', 'department'
+            ];
+            
+            for (let field of requiredFields) {
+                const element = document.getElementById(field);
+                if (!element.value.trim()) {
+                    alert(`Please fill in the ${element.previousElementSibling.textContent} field.`);
+                    element.focus();
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        // Function to show success message
+        function showSuccessMessage() {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Function to update the student table
+        function updateStudentTable(filteredStudents = null) {
+            const tbody = document.getElementById('studentsTableBody');
+            const dataToDisplay = filteredStudents || students;
+            
+            if (dataToDisplay.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="13" class="no-data">
+                            ${filteredStudents ? 'No matching records found.' : 'No student records found in storage.'}<br>
+                            <small>${filteredStudents ? 'Try a different search term.' : 'Add students using the form to see them here.'}</small>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = dataToDisplay.map(student => `
+                <tr>
+                    <td><strong>${student.firstName}</strong></td>
+                    <td><strong>${student.lastName}</strong></td>
+                    <td><span class="program-badge">${student.programType}</span></td>
+                    <td>${student.programStudying}</td>
+                    <td><code>${student.studentId}</code></td>
+                    <td><span class="level-badge">${student.level}</span></td>
+                    <td>${student.currentResidence}</td>
+                    <td>${student.hostelName || 'N/A'}</td>
+                    <td>${formatPhoneNumber(student.personalContact)}</td>
+                    <td>${formatPhoneNumber(student.emergencyContact)}</td>
+                    <td>${student.department}</td>
+                    <td>
+                        ${student.isExecutive ? '<span class="executive-badge">Executive</span>' : 'No'}
+                    </td>
+                    <td class="action-buttons">
+                        <button class="view-btn" onclick="viewStudent(${student.id})">View</button>
+                        <button class="update-btn" onclick="openResidenceUpdate(${student.id})">Update Residence</button>
+                        <button class="delete-btn" onclick="deleteStudent(${student.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Function to format phone numbers
+        function formatPhoneNumber(phone) {
+            const cleaned = phone.replace(/\D/g, '');
+            if (cleaned.length === 10) {
+                return cleaned.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+            }
+            return phone;
+        }
+
+        // Function to update statistics
+        function updateStats() {
+            document.getElementById('totalStudents').textContent = students.length;
+            
+            // Count executive students
+            const executiveCount = students.filter(student => student.isExecutive).length;
+            document.getElementById('executiveStudents').textContent = executiveCount;
+            
+            document.getElementById('lastUpdated').textContent = students.length > 0 
+                ? new Date().toLocaleString() 
+                : 'Never';
+            
+            // Calculate storage size
+            const storageSize = JSON.stringify(students).length;
+            document.getElementById('storageSize').textContent = (storageSize / 1024).toFixed(2) + ' KB';
+        }
+
+        // Function to delete a student
+        function deleteStudent(studentId) {
+            if (confirm('Are you sure you want to delete this student record?')) {
+                students = students.filter(student => student.id !== studentId);
+                localStorage.setItem('students', JSON.stringify(students));
+                updateStudentTable();
+                updateStats();
+                
+                // If search is active, update search results
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput.value) {
+                    searchStudents();
+                }
+            }
+        }
+
+        // Function to view student details
+        function viewStudent(studentId) {
+            const student = students.find(s => s.id === studentId);
+            if (student) {
+                const details = `
+First Name: ${student.firstName}
+Last Name: ${student.lastName}
+Program Type: ${student.programType}
+Program Studying: ${student.programStudying}
+Student ID: ${student.studentId}
+Level: ${student.level}
+Current Residence: ${student.currentResidence}
+Hostel Name: ${student.hostelName || 'N/A'}
+Personal Contact: ${formatPhoneNumber(student.personalContact)}
+Emergency Contact: ${formatPhoneNumber(student.emergencyContact)}
+Department: ${student.department}
+Executive Status: ${student.isExecutive ? 'Yes' : 'No'}
+                `.trim();
+                
+                alert('Student Details:\n\n' + details);
+            }
+        }
+
+        // Function to open residence update form
+        function openResidenceUpdate(studentId) {
+            const student = students.find(s => s.id === studentId);
+            if (student) {
+                document.getElementById('updateStudentName').value = `${student.firstName} ${student.lastName}`;
+                document.getElementById('updateStudentId').value = student.id;
+                document.getElementById('updateResidence').value = student.currentResidence;
+                document.getElementById('updateHostel').value = student.hostelName || '';
+                
+                document.getElementById('residenceUpdateSection').style.display = 'block';
+                
+                // Scroll to the update section
+                document.getElementById('residenceUpdateSection').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Enhanced search functionality
+        function searchStudents() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const searchResultsSection = document.getElementById('searchResultsSection');
+            const searchResultsContainer = document.getElementById('searchResultsContainer');
+            const searchResultsCount = document.getElementById('searchResultsCount');
+            const sortControls = document.getElementById('sortControls');
+            
+            if (!searchTerm) {
+                searchResultsSection.style.display = 'none';
+                sortControls.style.display = 'none';
+                updateStudentTable();
+                return;
+            }
+            
+            const filteredStudents = students.filter(student => 
+                student.firstName.toLowerCase().includes(searchTerm) ||
+                student.lastName.toLowerCase().includes(searchTerm) ||
+                student.studentId.toLowerCase().includes(searchTerm) ||
+                student.programType.toLowerCase().includes(searchTerm) ||
+                student.programStudying.toLowerCase().includes(searchTerm) ||
+                student.department.toLowerCase().includes(searchTerm) ||
+                student.currentResidence.toLowerCase().includes(searchTerm) ||
+                student.hostelName.toLowerCase().includes(searchTerm) ||
+                (student.isExecutive && 'executive'.includes(searchTerm))
+            );
+            
+            // Store the search results for sorting
+            currentSearchResults = [...filteredStudents];
+            
+            // Sort the results alphabetically by first name by default
+            sortSearchResults('firstName');
+            
+            // Update the table with filtered results
+            updateStudentTable(currentSearchResults);
+            
+            // Display detailed search results
+            if (currentSearchResults.length > 0) {
+                searchResultsSection.style.display = 'block';
+                sortControls.style.display = 'flex';
+                searchResultsCount.textContent = `${currentSearchResults.length} result(s) found`;
+                
+                // Generate detailed search results
+                displaySearchResults();
+            } else {
+                searchResultsSection.style.display = 'none';
+                sortControls.style.display = 'none';
+            }
+        }
+
+        // Function to sort search results
+        function sortSearchResults(field) {
+            currentSortField = field;
+            
+            // Update active sort button
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Sort the results
+            currentSearchResults.sort((a, b) => {
+                if (field === 'level') {
+                    // For level, we need to handle numeric and text values
+                    const levelOrder = {
+                        '100': 1, '200': 2, '300': 3, '400': 4, 
+                        '500': 5, '600': 6, 'masters': 7, 'phd': 8
+                    };
+                    return (levelOrder[a.level] || 9) - (levelOrder[b.level] || 9);
+                } else {
+                    // For text fields, sort alphabetically
+                    const aValue = a[field].toLowerCase();
+                    const bValue = b[field].toLowerCase();
+                    return aValue.localeCompare(bValue);
+                }
+            });
+            
+            // Update the table with sorted results
+            updateStudentTable(currentSearchResults);
+            
+            // Update the detailed search results display
+            displaySearchResults();
+        }
+
+        // Function to display search results
+        function displaySearchResults() {
+            const searchResultsContainer = document.getElementById('searchResultsContainer');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            searchResultsContainer.innerHTML = currentSearchResults.map(student => {
+                // Highlight matching terms in the student details
+                const highlightMatch = (text) => {
+                    if (!text) return text;
+                    const regex = new RegExp(`(${searchTerm})`, 'gi');
+                    return text.replace(regex, '<span class="highlight">$1</span>');
+                };
+                
+                return `
+                <div class="student-details">
+                    <div class="student-details-header">
+                        <div class="student-name">${highlightMatch(student.firstName)} ${highlightMatch(student.lastName)}</div>
+                        <div class="student-id">${highlightMatch(student.studentId)}</div>
+                    </div>
+                    <div class="student-details-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Program Type</div>
+                            <div class="detail-value">${highlightMatch(student.programType)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Program Studying</div>
+                            <div class="detail-value">${highlightMatch(student.programStudying)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Level</div>
+                            <div class="detail-value">${highlightMatch(student.level)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Current Residence</div>
+                            <div class="detail-value">${highlightMatch(student.currentResidence)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Hostel Name</div>
+                            <div class="detail-value">${highlightMatch(student.hostelName || 'N/A')}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Personal Contact</div>
+                            <div class="detail-value">${formatPhoneNumber(student.personalContact)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Emergency Contact</div>
+                            <div class="detail-value">${formatPhoneNumber(student.emergencyContact)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Department</div>
+                            <div class="detail-value">${highlightMatch(student.department)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Executive Status</div>
+                            <div class="detail-value">${student.isExecutive ? 'Executive Member' : 'Regular Member'}</div>
+                        </div>
+                    </div>
+                    <div class="action-buttons" style="margin-top: 15px;">
+                        <button class="view-btn" onclick="viewStudent(${student.id})">View Full Details</button>
+                        <button class="update-btn" onclick="openResidenceUpdate(${student.id})">Update Residence</button>
+                        <button class="delete-btn" onclick="deleteStudent(${student.id})">Delete Record</button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Clear search
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchResultsSection').style.display = 'none';
+            document.getElementById('sortControls').style.display = 'none';
+            document.getElementById('residenceUpdateSection').style.display = 'none';
+            updateStudentTable();
+        }
+
+        // Export to CSV
+        function exportToCSV() {
+            if (students.length === 0) {
+                alert('No data to export!');
+                return;
+            }
+            
+            const headers = ['First Name', 'Last Name', 'Program Type', 'Program Studying', 'Student ID', 'Level', 'Current Residence', 'Hostel Name', 'Personal Contact', 'Emergency Contact', 'Department', 'Executive Status'];
+            const csvContent = [
+                headers.join(','),
+                ...students.map(student => [
+                    student.firstName,
+                    student.lastName,
+                    student.programType,
+                    student.programStudying,
+                    student.studentId,
+                    student.level,
+                    student.currentResidence,
+                    student.hostelName || '',
+                    student.personalContact,
+                    student.emergencyContact,
+                    student.department,
+                    student.isExecutive ? 'Executive' : 'Regular'
+                ].map(field => `"${field}"`).join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `student_records_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Clear all data
+        function clearAllData() {
+            if (students.length === 0) {
+                alert('No data to clear!');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to delete ALL student records? This action cannot be undone.')) {
+                students = [];
+                localStorage.setItem('students', JSON.stringify(students));
+                updateStudentTable();
+                updateStats();
+                alert('All student records have been cleared!');
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStudentTable();
+            updateStats();
+            
+            // Add search event listener
+            document.getElementById('searchInput').addEventListener('input', searchStudents);
+        });
+    </script>
+</body>
+</html>
